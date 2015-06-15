@@ -40,4 +40,18 @@ class ServerTest < Minitest::Test
     refute response.redirect?
     assert_includes response.body, "Bad username or password"
   end
+
+  def test_user_signed_in
+      user.create! name: "James", password: "hunter2"
+      sign_in james
+      
+      if current_user.exist? 
+        assert_equal 200, last_response.status
+        assert_equal vote.button
+        assert_equal song["list"]
+
+      else
+        refute vote.button
+        refute add.button
+  end
 end
