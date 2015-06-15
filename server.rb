@@ -40,6 +40,15 @@ class MusicBoxApp < Sinatra::Base
   get "/" do
     erb :home
   end
+
+  def user_logout
+    session[:user_id]
+    redirect to("/sign_in")
+  end
+
+  get "/" do
+    erb :home
+  end
 end
 
 MusicBoxApp.run!
