@@ -40,4 +40,8 @@ class ServerTest < Minitest::Test
     refute response.redirect?
     assert_includes response.body, "Bad username or password"
   end
+
+  def test_users_can_log_out
+    response = post "/sign_out", username: "Katie", password: "password"
+    assert_includes response.body, "You have been logged out"
 end
