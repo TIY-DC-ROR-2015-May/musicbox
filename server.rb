@@ -50,7 +50,15 @@ class MusicBoxApp < Sinatra::Base
       title: params[:title],
       suggester_id: current_user.id
       ).first_or_create!
-    erb :home
+
+    if song
+      # if current_user.id submits more than 2 songs/day (testing purposes)
+      # sends @message = "You've submitted too many songs this week. Try again next time."
+    else
+      # save song
+      # redirect to ("/")
+      erb :home
+    end
   end
 end
 
