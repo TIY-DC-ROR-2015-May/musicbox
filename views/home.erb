@@ -6,3 +6,10 @@
   <!-- Form to be added by another team -->
   <p>suggest a new song</p>
 <% end %>
+
+<h3>Songs</h3>
+<ul>
+  <% @songs.each do |song| %>
+    <li>artist: <%= song.artist %>, title: <%= song.title %></li>
+  <% end %>
+</ul>
