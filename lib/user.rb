@@ -11,4 +11,8 @@ class User < ActiveRecord::Base
   validates_presence_of :name, :password
   validates_uniqueness_of :name
   # TODO: validates length of password?
+
+    def num_of_songs_suggested_this_week
+      self.suggested_songs.where(suggester_id: id).where('created_at >= ?', 1.week.ago).count
+    end
 end
