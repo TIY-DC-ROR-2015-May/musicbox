@@ -46,7 +46,7 @@ class MusicBoxApp < Sinatra::Base
     redirect to("/sign_in")
   end
 
-  get "/" do
+  delete "/" do
     erb :home
   end
 end
