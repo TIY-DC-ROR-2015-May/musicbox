@@ -44,15 +44,16 @@ class ServerTest < Minitest::Test
   def test_user_signed_in
       james = User.create! name: "James", password: "hunter2"
       sign_in james
-      
-    if current_user
+      response = get "/"
+      assert_includes response.body, "vote"
       assert_equal last_response.status, 200 
-      assert_equal vote.button
-      assert_equal song["list"]
+      assert_includes response.body, "suggest"
+  end
 
-    else
-      refute vote.button
-      refute add.button
-    end
+  def test_user_not_signed_in
+   response = get "/"
+   refute_includes response.body, "vote"
+   refute_includes response.body, "suggest"
+
   end
 end
