@@ -31,8 +31,9 @@ class MusicBoxApp < Sinatra::Base
       session[:logged_in_user_id] = user.id
       redirect to("/")
     else
-      # TODO: Set a message bad password ...
-      redirect to("/sign_in")
+      @message = "Bad username or password"
+      #redirect to("/sign_in")
+      erb :sign_in
     end
   end
 
