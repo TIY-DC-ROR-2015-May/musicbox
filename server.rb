@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'tilt/erubis' # Fixes a warning
 
 require 'pry'
 
@@ -42,4 +43,4 @@ class MusicBoxApp < Sinatra::Base
   end
 end
 
-MusicBoxApp.run!
+MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
