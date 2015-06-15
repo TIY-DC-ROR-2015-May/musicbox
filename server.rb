@@ -42,7 +42,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   def user_logout
-    session[:user_id]
+    session.delete[:logged_in_user_id]
     redirect to("/sign_in")
   end
 
