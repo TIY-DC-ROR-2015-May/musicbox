@@ -9,6 +9,7 @@
 
     <% if current_user %>
       <p>Welcome <%= current_user.name %></p>
+      <a href="/change_password">Change Credentials</a>
     <% else %>
       <p>You need to <a href="/sign_in">sign in</a></p>
     <% end %>
