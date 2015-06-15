@@ -41,6 +41,12 @@ class MusicBoxApp < Sinatra::Base
   get "/" do
     erb :home
   end
+
+  post "/suggest_song" do
+    # enter Artist, Title, Album=nil
+    # submit and save to Songs table
+    # save suggester_id = current_user.id
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
