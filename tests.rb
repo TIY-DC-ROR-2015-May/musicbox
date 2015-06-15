@@ -46,7 +46,7 @@ class ServerTest < Minitest::Test
       sign_in james
       
     if current_user
-      assert_equal 200, last_response.status
+      assert_equal last_response.status, 200 
       assert_equal vote.button
       assert_equal song["list"]
 
