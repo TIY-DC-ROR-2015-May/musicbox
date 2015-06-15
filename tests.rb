@@ -46,18 +46,36 @@ class ServerTest < Minitest::Test
   end
 
   def test_users_can_upvote_and_downvote
-    katie = User.create! name: "Katie", password: "hunter2"
+    katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
+    test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
+
+    sign_in katie
+
+    5.times do
+      post "/vote", song_title: test_song.title, value: 1
+    end
+    
+    assert_equal 200, last_response.status
+    assert_equal 5, test_song.total_votes
+
+    3.times do
+      post "/vote", song_title: test_song.title, value: -1
+    end
+    
+    assert_equal 200, last_response.status
+    assert_equal 2, test_song.total_votes    
+  end
+
+  def test_users_have_limited_number_of_votes
+    katie = User.create! name: "Katie", password: "hunter2", votes_left: 0
     test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
 
     sign_in katie
 
     post "/vote", song_title: test_song.title, value: 1
-    assert_equal 200, last_response.status
-    assert_equal 1, test_song.total_votes
 
-  end
-
-  def test_users_have_limited_number_of_votes
+    assert_equal 400, last_response.status
+    assert_includes last_response.body, "You have exceeded your weekly vote limit!"
   end
 
 end

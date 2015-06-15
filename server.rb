@@ -43,9 +43,14 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/vote" do
-    song_id = Song.where(title: params[:song_title]).first.id
-    song = Song.where(title: params[:song_title]).first
-    Vote.create! voter_id: current_user.id, song_id: song_id, value: params[:value]
+    if current_user.votes_left > 0
+      song_id = Song.where(title: params[:song_title]).first.id
+      song = Song.where(title: params[:song_title]).first
+      Vote.create! voter_id: current_user.id, song_id: song_id, value: params[:value]
+    else
+      status 400
+      body "You have exceeded your weekly vote limit!"
+    end
   end
 end
 
