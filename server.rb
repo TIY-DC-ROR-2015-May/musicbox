@@ -47,6 +47,13 @@ class MusicBoxApp < Sinatra::Base
     @username = current_user.name
     erb :change_password
   end
+
+  post "/update_password" do
+    current_user.password = params[:new_password]
+    current_user.save!
+    erb :change_password
+  end
+
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
