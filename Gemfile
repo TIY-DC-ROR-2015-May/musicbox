@@ -7,3 +7,6 @@ gem 'minitest'
 gem 'rack-test'
 gem 'tilt'
 gem 'erubis'
+
+gem 'omniauth'
+gem 'omniauth-spotify'
