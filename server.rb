@@ -41,6 +41,12 @@ class MusicBoxApp < Sinatra::Base
   get "/" do
     erb :home
   end
+
+  post "/vote" do
+    song_id = Song.where(title: params[:song_title]).first.id
+    song = Song.where(title: params[:song_title]).first
+    Vote.create! voter_id: current_user.id, song_id: song_id, value: params[:value]
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
