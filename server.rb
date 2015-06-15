@@ -47,7 +47,7 @@ class MusicBoxApp < Sinatra::Base
     # submit and save to Songs table
 
 
-    if Song.where(suggester_id: current_user.id).where('created_at >= ?', 1.week.ago).count <= 4
+    if Song.where(suggester_id: current_user.id).where('created_at >= ?', 1.week.ago).count <= 4 #<--- This logic lets you add 5 songs a week
       song = Song.where(
       artist: params[:artist],
       title: params[:title],
