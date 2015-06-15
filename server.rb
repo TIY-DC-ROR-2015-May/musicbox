@@ -41,6 +41,12 @@ class MusicBoxApp < Sinatra::Base
   get "/" do
     erb :home
   end
+
+  get "/change_password" do
+    @password = current_user.password
+    @username = current_user.name
+    erb :change_password
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
