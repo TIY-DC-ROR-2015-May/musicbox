@@ -49,9 +49,13 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/update_password" do
-    current_user.password = params[:new_password]
-    current_user.save!
-    erb :change_password
+    current_user.update(password: params["new_password"])
+    redirect to("/change_password")
+  end
+
+  post "/update_username" do
+    current_user.update(name: params["new_username"])
+    redirect to("/change_password")
   end
 
 end
