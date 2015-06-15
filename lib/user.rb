@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   # has_many :songs
   # has_many :songs, through: :votes
   # FIXME
-  has_many :suggested_songs, class_name: "Song"
+  has_many :suggested_songs, class_name: "Song", foreign_key: "suggester_id"
   has_many :voted_songs, through: :votes
 
   validates_presence_of :name, :password

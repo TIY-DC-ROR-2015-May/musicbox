@@ -45,18 +45,17 @@ class MusicBoxApp < Sinatra::Base
   post "/suggest_song" do
     # enter Artist, Title, Album=nil
     # submit and save to Songs table
-    song = Song.where(
+
+
+    if Song.where(suggester_id: current_user.id).where('created_at >= ?', 1.week.ago).count <= 4
+      song = Song.where(
       artist: params[:artist],
       title: params[:title],
       suggester_id: current_user.id
       ).first_or_create!
-
-    if song
-      # if current_user.id submits more than 2 songs/day (testing purposes)
-      # sends @message = "You've submitted too many songs this week. Try again next time."
+      erb :home
     else
-      # save song
-      # redirect to ("/")
+      @message = "You have submitted too many songs this week. Try again later."
       erb :home
     end
   end
