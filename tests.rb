@@ -7,7 +7,9 @@ require './db/setup'
 require './lib/all'
 require './server'
 
+
 require_relative "./server"
+
 
 class ServerTest < Minitest::Test
   include Rack::Test::Methods
@@ -21,15 +23,15 @@ class ServerTest < Minitest::Test
     Song.delete_all
   end
 
-  def sign_in user
+  def sign_in user, password
     # This is a helper method that you can call to sign a particular user in
-    post "/take_sign_in", username: user.name, password: user.password
+    post "/take_sign_in", username: user.name, password: password
   end
 
   def test_users_can_log_in
     katie = User.create! name: "Katie", password: "hunter2"
 
-    sign_in katie
+    sign_in katie, "hunter2"
     assert last_response.redirect?
 
     response = get "/"
@@ -41,8 +43,8 @@ class ServerTest < Minitest::Test
     User.create! name: "user", password: "password"
 
     response = post "/take_sign_in", username: "Katie", password: "password"
-    refute response.redirect?
-    assert_includes response.body, "Bad username or password"
+    assert response.redirect?
+    assert_includes response.location, "/sign_in"
   end
 
   # def test_users_can_log_out
@@ -54,7 +56,7 @@ class ServerTest < Minitest::Test
     katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
     test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
 
-    sign_in katie
+    sign_in katie, "hunter2"
 
     5.times do
       post "/vote", song_title: test_song.title, value: 1
@@ -66,7 +68,7 @@ class ServerTest < Minitest::Test
     3.times do
       post "/vote", song_title: test_song.title, value: -1
     end
-    
+
     assert_equal 200, last_response.status
     assert_equal 2, test_song.total_votes
   end
@@ -75,7 +77,7 @@ class ServerTest < Minitest::Test
     katie = User.create! name: "Katie", password: "hunter2", votes_left: 0
     test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
 
-    sign_in katie
+    sign_in katie, "hunter2"
 
     post "/vote", song_title: test_song.title, value: 1
 
@@ -85,7 +87,7 @@ class ServerTest < Minitest::Test
 
   def test_user_signed_in
     james = User.create! name: "James", password: "hunter2"
-    sign_in james
+    sign_in james, "hunter2"
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
     assert_includes response.body, "vote"
@@ -103,6 +105,7 @@ class ServerTest < Minitest::Test
     refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
+
   end
 
   def test_admin_can_remove_user
@@ -110,10 +113,26 @@ class ServerTest < Minitest::Test
     james = User.create! name: "James", password: "hunter3", votes_left: 10
 
     sign_in katie
+    binding.pry
+    # delete "/remove_user" name: james.name
 
-    delete "/remove_user" name: james.name
+    # assert_equals 200, last_response.status
+    # assert_equals nil, james
+  end
 
-    assert_equals 200, last_response.status
-    assert_equals nil, james
+  def test_non_admin_cannot_remove_user
+    # katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
+    # james = User.create! name: "James", password: "hunter3", votes_left: 10
+
+    # sign_in katie
+
+    # # delete "/remove_user" name: james.name
+
+    # assert_equals 200, last_response.status
+    # assert_equals true, james
+  end
+
+  def test_admin_can_invite_users
+  end
 
 end

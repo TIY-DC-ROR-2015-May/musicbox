@@ -11,7 +11,7 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  set :session_secret, File.read("./session_secret.txt")
+  # set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]
@@ -103,6 +103,13 @@ class MusicBoxApp < Sinatra::Base
     current_user.update(name: params["new_username"])
     redirect to("/change_password")
   end
+
+  # delete "/remove_user" do
+  #   if current_user.admin?
+  #     deleted_user = User.find_by_name(params[:name])
+  #     User.delete
+  #   end
+  # end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
