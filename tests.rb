@@ -83,6 +83,7 @@ class ServerTest < Minitest::Test
 
     assert_equal 400, last_response.status
     assert_includes last_response.body, "You have exceeded your weekly vote limit!"
+
   end
 
   def test_user_signed_in
@@ -105,6 +106,57 @@ class ServerTest < Minitest::Test
     refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
+  end
+
+  ##########
+
+  def test_winning_votes_playlist
+    james = User.create! name: "James", password: "hunter2", votes_left: 10
+    katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
+    kyle = User.create! name: "Kyle", password: "hunter2", votes_left: 10
+    su = User.create! name: "Su", password: "hunter2", votes_left: 10
+    song1 = Song.create! suggester_id: james.id, artist: "ODESZA", title: "All We Need"
+    song2 = Song.create! suggester_id: james.id, artist: "ABC", title: "Apples and Apples"
+    song3 = Song.create! suggester_id: james.id, artist: "DEF", title: "456"
+    song4 = Song.create! suggester_id: james.id, artist: "GHI", title: "789"
+    song5 = Song.create! suggester_id: james.id, artist: "JKL", title: "101112"
+
+    sign_in james, "hunter2"
+    post "/vote", song_title: song1.title, value: 1
+    post "/vote", song_title: song2.title, value: -1
+    post "/vote", song_title: song3.title, value: 1
+    post "/vote", song_title: song4.title, value: -1
+    post "/vote", song_title: song5.title, value: -1
+
+    sign_in katie, "hunter2"
+    post "/vote", song_title: song1.title, value: 1
+    post "/vote", song_title: song2.title, value: -1
+    post "/vote", song_title: song3.title, value: 1
+    post "/vote", song_title: song4.title, value: -1
+    post "/vote", song_title: song5.title, value: -1
+
+    sign_in kyle, "hunter2"
+    post "/vote", song_title: song1.title, value: 1
+    post "/vote", song_title: song2.title, value: -1
+    post "/vote", song_title: song3.title, value: 1
+    post "/vote", song_title: song4.title, value: -1
+    post "/vote", song_title: song5.title, value: -1
+
+    sign_in su, "hunter2"
+    post "/vote", song_title: song1.title, value: 1
+    post "/vote", song_title: song2.title, value: -1
+    post "/vote", song_title: song3.title, value: 1
+    post "/vote", song_title: song4.title, value: -1
+    post "/vote", song_title: song5.title, value: -1
+
+
+    assert_equal 4, song1.total_votes 
+    assert_equal -4, song2.total_votes
+    response = post "/playlist"
+    assert_includes response.body, song_title: "All We Need"
+    assert_refutes response.body, song_title: "Apples to Apples"
+
 
   end
+
 end
