@@ -58,6 +58,13 @@ class MusicBoxApp < Sinatra::Base
       erb :home
     end
   end
-end
 
+  post "/sign_out" do
+
+   if current_user 
+    session.delete(:logged_in_user_id)
+    redirect to ("/")
+   end
+  end
+end
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
