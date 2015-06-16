@@ -104,12 +104,22 @@ class MusicBoxApp < Sinatra::Base
     redirect to("/change_password")
   end
 
-  # delete "/remove_user" do
-  #   if current_user.admin?
-  #     deleted_user = User.find_by_name(params[:name])
-  #     User.delete
-  #   end
-  # end
+  patch "/delete_user" do
+    if current_user.admin?
+      deleted_user = User.find_by_name(params[:name])
+      User.destroy(deleted_user.id)
+      "#{deleted_user.name} has been deleted."
+    else
+      body "Insufficient privileges."
+    end
+  end
+
+  post "/invite_user" do
+    if current_user.admin?
+      User.create! name: params[:name]
+    end
+  end
+
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__

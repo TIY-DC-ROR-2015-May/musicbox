@@ -105,34 +105,43 @@ class ServerTest < Minitest::Test
     refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
-
   end
 
   def test_admin_can_remove_user
-    katie = User.create! name: "Katie", password: "hunter2", votes_left: 10, admin: true
-    james = User.create! name: "James", password: "hunter3", votes_left: 10
+    katie = User.create! name: "Katie", password: "hunter2", admin: true
+    james = User.create! name: "James", password: "hunter3"
 
-    sign_in katie
+    sign_in katie, "hunter2"
+
+    patch "/delete_user", name: james.name
     binding.pry
-    # delete "/remove_user" name: james.name
-
-    # assert_equals 200, last_response.status
-    # assert_equals nil, james
+    assert_equal true, katie.admin?
+    assert_equal 200, last_response.status
+    assert_equal nil, james
+    assert_includes last_response.body, "#{deleted_user.name} has been deleted."
   end
 
   def test_non_admin_cannot_remove_user
-    # katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
-    # james = User.create! name: "James", password: "hunter3", votes_left: 10
+    katie = User.create! name: "Katie", password: "hunter2"
+    james = User.create! name: "James", password: "hunter3"
 
-    # sign_in katie
+    sign_in katie, "hunter2"
 
-    # # delete "/remove_user" name: james.name
+    patch "/delete_user", name: james.name
 
-    # assert_equals 200, last_response.status
-    # assert_equals true, james
+    assert_equal 200, last_response.status
+    assert_equal james, james
+    assert_includes last_response.body, "Insufficient privileges."
   end
 
   def test_admin_can_invite_users
+    katie = User.create! name: "Katie", password: "hunter2", admin: true
+
+    sign_in katie, "hunter2"
+
+    post "/invite_user", name: "Bella"
+
+
   end
 
 end
