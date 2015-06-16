@@ -7,12 +7,17 @@
   <body>
     <h1>MusicBox</h1>
 
+    <% if msg = get_message %>
+      <p><%= msg %></p>
+    <% end %>
+
     <% if current_user %>
-      <p>Log Out, <%= current_user.name %></p>
-      
+      <p>Welcome <%= current_user.name %></p>
       <form method="POST" action="/sign_out">
+        <input type="hidden" name="_method" value="DELETE">
         <button>Log Out</button>
       </form>
+      <a href="/change_password">Change Credentials</a>
     <% else %>
       <p>You are now logged out, <a href="/sign_in">sign in</a></p>
     <% end %>

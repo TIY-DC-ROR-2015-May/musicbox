@@ -8,7 +8,10 @@ require './lib/all'
 
 class MusicBoxApp < Sinatra::Base
   enable :logging
+  enable :method_override
   enable :sessions
+
+  set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]
@@ -18,6 +21,14 @@ class MusicBoxApp < Sinatra::Base
     end
   end
 
+  def set_message message
+    session[:flash_message] = message
+  end
+
+  def get_message
+    session.delete(:flash_message)
+  end
+
   get "/sign_in" do
     erb :sign_in
   end
@@ -25,20 +36,20 @@ class MusicBoxApp < Sinatra::Base
   post "/take_sign_in" do
     user = User.where(
       name:     params[:username],
-      password: params[:password]
+      password: User.encrypt_password(params[:password])
     ).first
 
     if user
       session[:logged_in_user_id] = user.id
       redirect to("/")
     else
-      @message = "Bad username or password"
-      #redirect to("/sign_in")
-      erb :sign_in
+      set_message "Bad username or password"
+      redirect to("/sign_in")
     end
   end
 
   get "/" do
+    @songs = Song.all
     erb :home
   end
 
@@ -48,22 +59,21 @@ class MusicBoxApp < Sinatra::Base
     # require_current_user
     if current_user.num_of_songs_suggested_this_week <= 4 
       song = Song.where(
-        artist:             params[:artist],
-        title:               params[:title],
-        suggester_id:   current_user.id
+        artist:       params[:artist],
+        title:        params[:title],
+        suggester_id: current_user.id
       ).first_or_create!
-      erb :home
     else
-      @message = "You have submitted too many songs this week. Try again later."
-      erb :home
+      set_message "You have submitted too many songs this week. Try again later."
     end
+    redirect to("/")
   end
 
-  post "/sign_out" do
-   if current_user 
-    session.delete(:logged_in_user_id)
-    redirect to ("/")
-   end
+  delete "/sign_out" do
+    if current_user
+      session.delete(:logged_in_user_id)
+      redirect to ("/")
+    end
   end
 
   post "/vote" do
@@ -76,6 +86,22 @@ class MusicBoxApp < Sinatra::Base
       status 400
       body "You have exceeded your weekly vote limit!"
     end
+  end
+
+  get "/change_password" do
+    @password = current_user.password
+    @username = current_user.name
+    erb :change_password
+  end
+
+  post "/update_password" do
+    current_user.update(password: params["new_password"])
+    redirect to("/change_password")
+  end
+
+  post "/update_username" do
+    current_user.update(name: params["new_username"])
+    redirect to("/change_password")
   end
 end
 

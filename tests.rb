@@ -103,6 +103,6 @@ class ServerTest < Minitest::Test
     refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
-
   end
+
 end

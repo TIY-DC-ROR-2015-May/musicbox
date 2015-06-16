@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 class User < ActiveRecord::Base
   has_many :votes
 
@@ -12,8 +14,17 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :name
   # TODO: validates length of password?
 
-    def num_of_songs_suggested_this_week
-      suggested_songs.where('created_at >= ?', 1.week.ago).count
-    end
+  def self.encrypt_password password
+    # Note: this isn't the best choice of hash function
+    Digest::SHA1.hexdigest password
+  end
+
+  def password= unencrypted_password
+    super User.encrypt_password(unencrypted_password)
+  end
+
+  def num_of_songs_suggested_this_week
+    suggested_songs.where('created_at >= ?', 1.week.ago).count
+  end
 
 end
