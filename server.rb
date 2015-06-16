@@ -124,7 +124,6 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
-    redirect to("/admin_dashboard")
   end
 
   post "/invite_user" do
@@ -139,14 +138,13 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
-    redirect to("/admin_dashboard")
+
   end
 
   post "/assign_admin" do
     soon_to_be_admin = User.find_by_name(params[:name])
     soon_to_be_admin.update(admin: true)
     admin_set_message "#{soon_to_be_admin.name} now has admin privileges."
-    redirect to("/admin_dashboard")
   end
 
 
