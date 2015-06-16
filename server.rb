@@ -36,7 +36,7 @@ class MusicBoxApp < Sinatra::Base
   post "/take_sign_in" do
     user = User.where(
       name:     params[:username],
-      password: params[:password]
+      password: User.encrypt_password(params[:password])
     ).first
 
     if user
@@ -59,9 +59,9 @@ class MusicBoxApp < Sinatra::Base
     # require_current_user
     if current_user.num_of_songs_suggested_this_week <= 4 
       song = Song.where(
-        artist:             params[:artist],
-        title:               params[:title],
-        suggester_id:   current_user.id
+        artist:       params[:artist],
+        title:        params[:title],
+        suggester_id: current_user.id
       ).first_or_create!
     else
       set_message "You have submitted too many songs this week. Try again later."
