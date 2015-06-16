@@ -19,8 +19,7 @@ class ServerTest < Minitest::Test
   end
 
   def setup
-    User.delete_all
-    Song.delete_all
+    [User, Song, Vote].each { |klass| klass.delete_all }
   end
 
   def sign_in user, password
@@ -150,13 +149,11 @@ class ServerTest < Minitest::Test
     post "/vote", song_title: song5.title, value: -1
 
 
-    assert_equal 4, song1.total_votes 
+    assert_equal  4, song1.total_votes
     assert_equal -4, song2.total_votes
     response = post "/playlist"
-    assert_includes response.body, song_title: "All We Need"
-    assert_refutes response.body, song_title: "Apples to Apples"
-
-
+    assert_includes response.body, "All We Need"
+    refute_includes response.body, "Apples to Apples"
   end
 
 end

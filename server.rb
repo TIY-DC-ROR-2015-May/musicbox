@@ -88,6 +88,16 @@ class MusicBoxApp < Sinatra::Base
     end
   end
 
+  post "/playlist" do
+    @playlist = Playlist.create!
+    Song.by_sort_letter.each do |letter, songs|
+      next unless songs
+      winner = songs.max_by { |s| s.total_votes }
+      @playlist.songs << winner
+    end
+    erb :show_playlist
+  end
+
   get "/change_password" do
     @password = current_user.password
     @username = current_user.name
