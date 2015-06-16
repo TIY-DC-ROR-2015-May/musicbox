@@ -45,12 +45,12 @@ class MusicBoxApp < Sinatra::Base
   post "/suggest_song" do
     # enter Artist, Title, Album=nil
     # submit and save to Songs table
-
+    # require_current_user
     if current_user.num_of_songs_suggested_this_week <= 4 
       song = Song.where(
-      artist: params[:artist],
-      title: params[:title],
-      suggester_id: current_user.id
+        artist:             params[:artist],
+        title:               params[:title],
+        suggester_id:   current_user.id
       ).first_or_create!
       erb :home
     else

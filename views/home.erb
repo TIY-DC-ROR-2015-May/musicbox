@@ -1,13 +1,13 @@
 <h2>Welcome to the home page</h2>
     <% if current_user %>
       <h3>Suggest a song</h3>
-		<form method="POST" action="/suggest_song">
-			Song title
-			<input type="text" name="title">
-			Artist name
-			<input type="text" name="artist">
-			<button>Submit</button>
-		</form>
+    <form method="POST" action="/suggest_song">
+      Song title
+      <input type="text" name="title">
+      Artist name
+      <input type="text" name="artist">
+      <button>Submit</button>
+    </form>
     <% end %>
     <% if @message %>
       <p><%= @message %></p>

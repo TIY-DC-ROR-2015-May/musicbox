@@ -13,6 +13,6 @@ class User < ActiveRecord::Base
   # TODO: validates length of password?
 
     def num_of_songs_suggested_this_week
-      self.suggested_songs.where(suggester_id: id).where('created_at >= ?', 1.week.ago).count
+      suggested_songs.where('created_at >= ?', 1.week.ago).count
     end
 end
