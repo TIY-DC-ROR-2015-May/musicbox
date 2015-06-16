@@ -138,7 +138,7 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
-
+    redirect to("/admin_dashboard")
   end
 
   patch "/assign_admin" do
@@ -149,6 +149,7 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
+    redirect to("/admin_dashboard")
   end
 
   patch "/revoke_admin" do
@@ -158,6 +159,7 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
+    redirect to("/admin_dashboard")
   end
 end
 
