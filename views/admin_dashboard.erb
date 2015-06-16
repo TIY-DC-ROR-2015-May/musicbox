@@ -15,7 +15,7 @@
 
 <h3>Remove users</h3>
 <form method="POST" action="/delete_user">
-  <input type="hidden" name="_method" value="DELETE">
+  <input type="hidden" name="_method" value="PATCH">
   Username
   <input type="text" name="name">
   <button>Delete</button>
@@ -23,6 +23,7 @@
 
 <h3>Assign admin to other users</h3>
 <form method="POST" action="/assign_admin">
+  <input type="hidden" name="_method" value="PATCH">
   Username
   <input type="text" name="name">
   <button>Make admin</button>

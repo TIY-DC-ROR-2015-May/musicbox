@@ -124,6 +124,7 @@ class MusicBoxApp < Sinatra::Base
     else
       body "Insufficient privileges."
     end
+    redirect to("/admin_dashboard")
   end
 
   post "/invite_user" do
@@ -135,8 +136,6 @@ class MusicBoxApp < Sinatra::Base
         else
           admin_set_message "A user with this name already exists."
         end
-    else
-      body "Insufficient privileges."
     end
     redirect to("/admin_dashboard")
   end
@@ -146,8 +145,6 @@ class MusicBoxApp < Sinatra::Base
       new_admin = User.find_by_name(params[:name])
       new_admin.update(admin: true)
       admin_set_message "#{new_admin.name} now has admin privileges."
-    else
-      body "Insufficient privileges."
     end
     redirect to("/admin_dashboard")
   end
@@ -156,8 +153,6 @@ class MusicBoxApp < Sinatra::Base
     if current_user.admin?
       revoked_admin = User.find_by_name(params[:name])
       revoked_admin.update(admin: false)
-    else
-      body "Insufficient privileges."
     end
     redirect to("/admin_dashboard")
   end

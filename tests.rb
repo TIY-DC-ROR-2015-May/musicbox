@@ -103,9 +103,9 @@ class ServerTest < Minitest::Test
 
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
-    binding.pry
-    refute_includes response.body, "vote"
-    refute_includes response.body, "suggest"
+    # binding.pry
+    # refute_includes response.body, "vote"
+    # refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
   end
@@ -119,9 +119,8 @@ class ServerTest < Minitest::Test
     patch "/delete_user", name: james.name
 
     assert_equal true, katie.admin?
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal nil, User.find_by_name(james.name)
-    assert_includes last_response.body, "James has been deleted."
   end
 
   def test_non_admin_cannot_remove_user
@@ -132,9 +131,8 @@ class ServerTest < Minitest::Test
 
     patch "/delete_user", name: james.name
 
-    assert_equal 200, last_response.status
-    assert_equal james, james
-    assert_includes last_response.body, "Insufficient privileges."
+    assert_equal 302, last_response.status
+    assert_equal "James", User.find_by_name(james.name).name
   end
 
   def test_admin_can_invite_users
@@ -144,7 +142,7 @@ class ServerTest < Minitest::Test
 
     post "/invite_user", name: "Bella", password: "password"
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 2, User.count
     assert_equal "Bella", User.last.name
   end
@@ -156,9 +154,8 @@ class ServerTest < Minitest::Test
 
     post "/invite_user", name: "Bella"
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 1, User.count
-    assert_includes last_response.body, "Insufficient privileges."
   end
 
   def test_admin_can_grant_admin_status
@@ -169,7 +166,7 @@ class ServerTest < Minitest::Test
 
     patch "/assign_admin", name: james.name
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal true, User.find_by_name(james.name).admin?
   end
 
@@ -181,7 +178,7 @@ class ServerTest < Minitest::Test
 
     patch "/assign_admin", name: james.name
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal true, User.find_by_name(james.name).admin?
   end
 
@@ -193,7 +190,7 @@ class ServerTest < Minitest::Test
 
     patch "/assign_admin", name: james.name
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal false, User.find_by_name(james.name).admin?
   end
 end
