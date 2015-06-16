@@ -1,6 +1,8 @@
 require "minitest/autorun"
 require "rack/test"
 
+require 'pry'
+
 ENV["TEST"] = "true"
 
 require './db/setup'
@@ -114,11 +116,11 @@ class ServerTest < Minitest::Test
     sign_in katie, "hunter2"
 
     patch "/delete_user", name: james.name
-    binding.pry
+
     assert_equal true, katie.admin?
     assert_equal 200, last_response.status
-    assert_equal nil, james
-    assert_includes last_response.body, "#{deleted_user.name} has been deleted."
+    assert_equal nil, User.find_by_name(james.name)
+    assert_includes last_response.body, "James has been deleted."
   end
 
   def test_non_admin_cannot_remove_user
@@ -144,5 +146,4 @@ class ServerTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal u.name, "Bella"
   end
-
 end

@@ -107,7 +107,7 @@ class MusicBoxApp < Sinatra::Base
   patch "/delete_user" do
     if current_user.admin?
       deleted_user = User.find_by_name(params[:name])
-      User.destroy(deleted_user.id)
+      deleted_user.destroy
       "#{deleted_user.name} has been deleted."
     else
       body "Insufficient privileges."
