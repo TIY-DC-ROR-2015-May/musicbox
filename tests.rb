@@ -39,7 +39,6 @@ class ServerTest < Minitest::Test
     response = get "/"
     assert_equal response.status, 200
     assert_includes response.body, katie.name
-    binding.pry
   end
 
   def test_users_can_fail_to_log_in
