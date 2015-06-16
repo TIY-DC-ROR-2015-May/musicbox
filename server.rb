@@ -8,6 +8,7 @@ require './lib/all'
 
 class MusicBoxApp < Sinatra::Base
   enable :logging
+  enable :method_override
   enable :sessions
 
   def current_user
@@ -60,11 +61,11 @@ class MusicBoxApp < Sinatra::Base
     end
   end
 
-  post "/sign_out" do
-   if current_user 
-    session.delete(:logged_in_user_id)
-    redirect to ("/")
-   end
+  delete "/sign_out" do
+    if current_user
+      session.delete(:logged_in_user_id)
+      redirect to ("/")
+    end
   end
 
   post "/vote" do
