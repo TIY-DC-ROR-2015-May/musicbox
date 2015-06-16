@@ -43,9 +43,8 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/sign_out" do
-   user = current_user
 
-   if user 
+   if current_user 
     session.delete(:logged_in_user_id)
     redirect to ("/")
    end
