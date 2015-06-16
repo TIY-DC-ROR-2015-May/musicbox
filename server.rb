@@ -145,7 +145,7 @@ class MusicBoxApp < Sinatra::Base
     if current_user.admin?
       new_admin = User.find_by_name(params[:name])
       new_admin.update(admin: true)
-      admin_set_message "#{soon_to_be_admin.name} now has admin privileges."
+      admin_set_message "#{new_admin.name} now has admin privileges."
     else
       body "Insufficient privileges."
     end

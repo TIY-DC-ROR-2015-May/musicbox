@@ -103,6 +103,7 @@ class ServerTest < Minitest::Test
 
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
+    binding.pry
     refute_includes response.body, "vote"
     refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
@@ -167,7 +168,7 @@ class ServerTest < Minitest::Test
     sign_in katie, "hunter2"
 
     patch "/assign_admin", name: james.name
-    # binding.pry
+
     assert_equal 200, last_response.status
     assert_equal true, User.find_by_name(james.name).admin?
   end
@@ -179,7 +180,7 @@ class ServerTest < Minitest::Test
     sign_in katie, "hunter2"
 
     patch "/assign_admin", name: james.name
-    binding.pry
+
     assert_equal 200, last_response.status
     assert_equal true, User.find_by_name(james.name).admin?
   end
