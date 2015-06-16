@@ -1,8 +1,6 @@
 require 'sinatra/base'
 require 'tilt/erubis' # Fixes a warning
-
 require 'pry'
-
 require './db/setup'
 require './lib/all'
 
@@ -10,6 +8,9 @@ class MusicBoxApp < Sinatra::Base
   enable :logging
   enable :method_override
   enable :sessions
+
+  include HTTParty
+  base_uri 'https://api.spotify.com'
 
   set :session_secret, File.read("./session_secret.txt")
 
