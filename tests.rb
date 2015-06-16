@@ -141,7 +141,7 @@ class ServerTest < Minitest::Test
 
     sign_in katie, "hunter2"
 
-    post "/invite_user", name: "Bella"
+    post "/invite_user", name: "Bella", password: "password"
 
     assert_equal 200, last_response.status
     assert_equal 2, User.count
@@ -159,5 +159,40 @@ class ServerTest < Minitest::Test
     assert_equal 1, User.count
     assert_includes last_response.body, "Insufficient privileges."
   end
-  
+
+  def test_admin_can_grant_admin_status
+    katie = User.create! name: "Katie", password: "hunter2", admin: true
+    james = User.create! name: "James", password: "hunter3"
+
+    sign_in katie, "hunter2"
+
+    patch "/assign_admin", name: james.name
+    # binding.pry
+    assert_equal 200, last_response.status
+    assert_equal true, User.find_by_name(james.name).admin?
+  end
+
+  def test_admin_can_revoke_admin_status
+    katie = User.create! name: "Katie", password: "hunter2", admin: true
+    james = User.create! name: "James", password: "hunter3", admin: true
+
+    sign_in katie, "hunter2"
+
+    patch "/assign_admin", name: james.name
+    binding.pry
+    assert_equal 200, last_response.status
+    assert_equal true, User.find_by_name(james.name).admin?
+  end
+
+  def test_non_admin_cannot_grant_admin_status
+    katie = User.create! name: "Katie", password: "hunter2"
+    james = User.create! name: "James", password: "hunter3"
+
+    sign_in katie, "hunter2"
+
+    patch "/assign_admin", name: james.name
+
+    assert_equal 200, last_response.status
+    assert_equal false, User.find_by_name(james.name).admin?
+  end
 end

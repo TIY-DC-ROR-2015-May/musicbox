@@ -116,13 +116,31 @@ class MusicBoxApp < Sinatra::Base
 
   post "/invite_user" do
     if current_user.admin?
-      new_user = User.create! name: params[:name], password: SecureRandom.hex(12)
+      new_user = User.create! name: params[:name], password: params[:password]
       new_user
     else
       body "Insufficient privileges."
     end
   end
 
+  patch "/assign_admin" do
+    if current_user.admin?
+      new_admin = User.find_by_name(params[:name])
+      new_admin.update(admin: true)
+      new_admin.save
+    else
+      body "Insufficient privileges."
+    end
+  end
+
+  patch "/revoke_admin" do
+    if current_user.admin?
+      revoked_admin = User.find_by_name(params[:name])
+      revoked_admin.update(admin: false)
+    else
+      body "Insufficient privileges."
+    end
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
