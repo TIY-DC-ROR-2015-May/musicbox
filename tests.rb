@@ -105,4 +105,15 @@ class ServerTest < Minitest::Test
     assert_includes response.body, song.title
   end
 
+  def test_admin_can_remove_user
+    katie = User.create! name: "Katie", password: "hunter2", votes_left: 10, admin: true
+    james = User.create! name: "James", password: "hunter3", votes_left: 10
+
+    sign_in katie
+
+    delete "/remove_user" name: james.name
+
+    assert_equals 200, last_response.status
+    assert_equals nil, james
+
 end
