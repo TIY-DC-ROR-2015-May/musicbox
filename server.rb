@@ -23,7 +23,7 @@ class MusicBoxApp < Sinatra::Base
 
   def require_user
   	unless current_user
-      set_message = "You need to log in to see this page"
+      set_message "You need to log in to see this page"
       redirect to ("/sign_in")
     end
   end
@@ -77,6 +77,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   delete "/sign_out" do
+  	require_user
     if current_user
       session.delete(:logged_in_user_id)
       redirect to ("/")
@@ -84,6 +85,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/vote" do
+  	require_user
     #TODO - What if there are two artists with same song title?
     if current_user.votes_left > 0
       song = Song.find_by_title(params[:song_title])
@@ -103,11 +105,13 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/update_password" do
+  	require_user
     current_user.update(password: params["new_password"])
     redirect to("/change_password")
   end
 
   post "/update_username" do
+  	require_user
     current_user.update(name: params["new_username"])
     redirect to("/change_password")
   end
