@@ -1,0 +1,24 @@
+<h2>Admin privileges</h2>
+
+<h3>Invite users</h3>
+<form method="POST" action="/sign_in">
+  Username
+  <input type="text" name="name">
+  Password
+  <input type="password" name="password"
+  <button>Create user account</button>
+</form>
+
+<h3>Remove users</h3>
+<form method="POST" action="/delete_user">
+  <input type="hidden" name="_method" value="DELETE">
+  Username
+  <input type="text" name="name">
+  <button>Delete</button>
+</form>
+
+<h3>Assign admin to other users</h3>
+<form method="POST" action="/assign_admin">
+  <input type="boolean" name="admin">
+  <button>Make admin</button>
+</form>
