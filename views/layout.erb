@@ -7,6 +7,10 @@
   <body>
     <h1>MusicBox</h1>
 
+    <% if msg = get_message %>
+      <p><%= msg %></p>
+    <% end %>
+
     <% if current_user %>
       <p>Welcome <%= current_user.name %></p>
       <form method="POST" action="/sign_out">

@@ -21,6 +21,14 @@ class MusicBoxApp < Sinatra::Base
     end
   end
 
+  def set_message message
+    session[:flash_message] = message
+  end
+
+  def get_message
+    session.delete(:flash_message)
+  end
+
   get "/sign_in" do
     erb :sign_in
   end
@@ -35,9 +43,8 @@ class MusicBoxApp < Sinatra::Base
       session[:logged_in_user_id] = user.id
       redirect to("/")
     else
-      @message = "Bad username or password"
-      #redirect to("/sign_in")
-      erb :sign_in
+      set_message "Bad username or password"
+      redirect to("/sign_in")
     end
   end
 
@@ -56,11 +63,10 @@ class MusicBoxApp < Sinatra::Base
         title:               params[:title],
         suggester_id:   current_user.id
       ).first_or_create!
-      erb :home
     else
-      @message = "You have submitted too many songs this week. Try again later."
-      erb :home
+      set_message "You have submitted too many songs this week. Try again later."
     end
+    redirect to("/")
   end
 
   delete "/sign_out" do
