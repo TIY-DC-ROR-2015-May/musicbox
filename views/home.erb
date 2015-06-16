@@ -15,7 +15,7 @@
   <% @songs.each do |song| %>
     <li>
       <% if current_user %>
-        <button>vote</button>
+        <button class="btn btn-sm btn-default">vote</button>
       <% end %>
       artist: <%= song.artist %>, title: <%= song.title %>
     </li>
