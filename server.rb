@@ -42,26 +42,13 @@ class MusicBoxApp < Sinatra::Base
     erb :home
   end
 
-# <<<<<<< HEAD
-#   def logout
-#     if session.delete[:logged_in_user_id]
-#      redirect to("/home")
-#      end
-#   end
-
-
   post "/sign_out" do
-    user = current_user
+   user = current_user
 
-
-      session.delete[:logged_in_user_id] 
-      redirect to ("/home")
-
-      session.delete(:logged_in_user_id)
-      redirect to ("/")
-
-    end
+   if user 
+    session.delete(:logged_in_user_id)
+    redirect to ("/")
+   end
   end
 end
-
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
