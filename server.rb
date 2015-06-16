@@ -104,6 +104,10 @@ class MusicBoxApp < Sinatra::Base
     redirect to("/change_password")
   end
 
+  get "/admin_dashboard" do
+    erb :admin_dashboard
+  end
+
   patch "/delete_user" do
     if current_user.admin?
       deleted_user = User.find_by_name(params[:name])
@@ -116,8 +120,13 @@ class MusicBoxApp < Sinatra::Base
 
   post "/invite_user" do
     if current_user.admin?
-      new_user = User.create! name: params[:name], password: SecureRandom.hex(12)
+      new_user = User.create! name: params[:name], password: params[:password]
       new_user
+        if new_user
+          set_message "User account has been created. The temporary password is #{params[:password]}."
+        else
+          set_message "A user with this name already exists."
+        end
     else
       body "Insufficient privileges."
     end
