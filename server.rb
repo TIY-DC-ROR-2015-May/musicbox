@@ -10,8 +10,6 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  include HTTParty
-  base_uri 'https://api.spotify.com'
 
   set :session_secret, File.read("./session_secret.txt")
 
