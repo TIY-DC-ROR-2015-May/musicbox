@@ -23,15 +23,15 @@ class ServerTest < Minitest::Test
     Song.delete_all
   end
 
-  def sign_in user
+  def sign_in user, password
     # This is a helper method that you can call to sign a particular user in
-    post "/take_sign_in", username: user.name, password: user.password
+    post "/take_sign_in", username: user.name, password: password
   end
 
   def test_users_can_log_in
     katie = User.create! name: "Katie", password: "hunter2"
 
-    sign_in katie
+    sign_in katie, "hunter2"
     assert last_response.redirect?
 
     response = get "/"
@@ -43,8 +43,8 @@ class ServerTest < Minitest::Test
     User.create! name: "user", password: "password"
 
     response = post "/take_sign_in", username: "Katie", password: "password"
-    refute response.redirect?
-    assert_includes response.body, "Bad username or password"
+    assert response.redirect?
+    assert_includes response.location, "/sign_in"
   end
 
   # def test_users_can_log_out
@@ -56,7 +56,7 @@ class ServerTest < Minitest::Test
     katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
     test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
 
-    sign_in katie
+    sign_in katie, "hunter2"
 
     5.times do
       post "/vote", song_title: test_song.title, value: 1
@@ -68,7 +68,7 @@ class ServerTest < Minitest::Test
     3.times do
       post "/vote", song_title: test_song.title, value: -1
     end
-    
+
     assert_equal 200, last_response.status
     assert_equal 2, test_song.total_votes
   end
@@ -77,7 +77,7 @@ class ServerTest < Minitest::Test
     katie = User.create! name: "Katie", password: "hunter2", votes_left: 0
     test_song = Song.create! suggester_id: katie.id, artist: "The Polly's", title: "Fake Song"
 
-    sign_in katie
+    sign_in katie, "hunter2"
 
     post "/vote", song_title: test_song.title, value: 1
 
@@ -87,7 +87,7 @@ class ServerTest < Minitest::Test
 
   def test_user_signed_in
     james = User.create! name: "James", password: "hunter2"
-    sign_in james
+    sign_in james, "hunter2"
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
     assert_includes response.body, "vote"
