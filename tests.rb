@@ -49,10 +49,10 @@ class ServerTest < Minitest::Test
     assert_includes response.location, "/sign_in"
   end
 
-  # def test_users_can_log_out
-  #   response = post "/sign_out", username: "Katie", password: "password"
-  #   assert_includes response.body, "You have been logged out"
-  # end
+  # # def test_users_can_log_out
+  # #   response = post "/sign_out", username: "Katie", password: "password"
+  # #   assert_includes response.body, "You have been logged out"
+  # # end
 
   def test_users_can_upvote_and_downvote
     katie = User.create! name: "Katie", password: "hunter2", votes_left: 10
@@ -144,6 +144,20 @@ class ServerTest < Minitest::Test
     post "/invite_user", name: "Bella"
 
     assert_equal 200, last_response.status
-    assert_equal u.name, "Bella"
+    assert_equal 2, User.count
+    assert_equal "Bella", User.last.name
   end
+
+  def test_non_admin_cannot_invite_users
+    katie = User.create! name: "Katie", password: "hunter2"
+
+    sign_in katie, "hunter2"
+
+    post "/invite_user", name: "Bella"
+
+    assert_equal 200, last_response.status
+    assert_equal 1, User.count
+    assert_includes last_response.body, "Insufficient privileges."
+  end
+  
 end
