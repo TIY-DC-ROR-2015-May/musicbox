@@ -54,7 +54,7 @@ class ServerTest < Minitest::Test
     5.times do
       post "/vote", song_title: test_song.title, value: 1
     end
-    
+
     assert_equal 200, last_response.status
     assert_equal 5, test_song.total_votes
 
@@ -63,7 +63,7 @@ class ServerTest < Minitest::Test
     end
     
     assert_equal 200, last_response.status
-    assert_equal 2, test_song.total_votes    
+    assert_equal 2, test_song.total_votes
   end
 
   def test_users_have_limited_number_of_votes
