@@ -11,7 +11,7 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  set :session_secret, File.read("./session_secret.txt")
+  # set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]

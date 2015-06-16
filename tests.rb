@@ -1,6 +1,8 @@
 require "minitest/autorun"
 require "rack/test"
 
+require 'pry'
+
 ENV["TEST"] = "true"
 
 require './db/setup'
@@ -35,6 +37,7 @@ class ServerTest < Minitest::Test
     response = get "/"
     assert_equal response.status, 200
     assert_includes response.body, katie.name
+    binding.pry
   end
 
   def test_users_can_fail_to_log_in
@@ -111,9 +114,9 @@ class ServerTest < Minitest::Test
 
     sign_in katie
 
-    delete "/remove_user" name: james.name
+    delete "/remove_user", name: james.name
 
-    assert_equals 200, last_response.status
-    assert_equals nil, james
-
+    assert_equal 200, last_response.status
+    assert_equal nil, james
+  end
 end
