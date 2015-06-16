@@ -106,5 +106,21 @@ class ServerTest < Minitest::Test
     assert_includes response.body, song.artist
     assert_includes response.body, song.title
 
+  def test_vote_up_down_button
+  jeff = User.create! name: "Jeff", password: "hunter2"
+  sign_in jeff, "hunter2"
+  song = jeff.suggested_songs.create! artist: "Justin Bieber", title: "Baby"
+    post "/vote", song_title: test_song.title, value: 1
+  assert_equal 200, last_response.status
+#test that when you click button, it vote up or down
+
+
+
+
+  end
+
+  def test_vote_down_button
+  end
+
   end
 end
