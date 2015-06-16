@@ -1,10 +1,12 @@
 require "minitest/autorun"
 require "rack/test"
+
+ENV["TEST"] = "true"
+
 require './db/setup'
 require './lib/all'
 require './server'
 
-ENV["TEST"] = "true"
 
 require_relative "./server"
 
