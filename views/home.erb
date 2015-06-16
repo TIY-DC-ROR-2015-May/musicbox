@@ -18,7 +18,9 @@
       <% if current_user %>
         <button>vote</button>
       <% end %>
-      artist: <%= song.artist %>, title: <%= song.title %>
+      <% if @songs %>
+        artist: <%= song.artist %>, title: <%= song.title %>, preview: <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
+      <% end %>
     </li>
   <% end %>
 </ul>
