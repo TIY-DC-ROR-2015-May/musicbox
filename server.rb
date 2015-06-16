@@ -21,6 +21,13 @@ class MusicBoxApp < Sinatra::Base
     end
   end
 
+  def require_user
+  	unless session[:logged_in_user_id]
+      session[:flash_message] = "You need to log in to see this page"
+      redirect to ("/sign_in")
+    end
+  end
+
   def set_message message
     session[:flash_message] = message
   end
@@ -56,7 +63,7 @@ class MusicBoxApp < Sinatra::Base
   post "/suggest_song" do
     # enter Artist, Title, Album=nil
     # submit and save to Songs table
-    # require_current_user
+    require_current_user
     if current_user.num_of_songs_suggested_this_week <= 4 
       song = Song.where(
         artist:       params[:artist],
@@ -89,6 +96,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   get "/change_password" do
+  	require_user
     @password = current_user.password
     @username = current_user.name
     erb :change_password
