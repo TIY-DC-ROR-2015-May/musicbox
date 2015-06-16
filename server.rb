@@ -60,11 +60,23 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/sign_out" do
-
    if current_user 
     session.delete(:logged_in_user_id)
     redirect to ("/")
    end
   end
+
+  post "/vote" do
+    #TODO - What if there are two artists with same song title?
+    if current_user.votes_left > 0
+      song = Song.find_by_title(params[:song_title])
+      # current_user.votes.create! song_id: song_id, value: params[:value]
+      Vote.create! voter_id: current_user.id, song_id: song.id, value: params[:value]
+    else
+      status 400
+      body "You have exceeded your weekly vote limit!"
+    end
+  end
 end
+
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__

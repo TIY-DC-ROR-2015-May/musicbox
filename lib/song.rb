@@ -6,4 +6,9 @@ class Song < ActiveRecord::Base
 
   validates_presence_of :title, :artist, :suggester
   validates_uniqueness_of :title, scope: :artist
+
+  def total_votes 
+    # votes.sum(:value)
+    Vote.where(song_id: self.id).sum(:value)
+  end
 end
