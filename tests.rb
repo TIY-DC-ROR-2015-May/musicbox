@@ -141,7 +141,8 @@ class ServerTest < Minitest::Test
 
     post "/invite_user", name: "Bella"
 
-
+    assert_equal 200, last_response.status
+    assert_equal u.name, "Bella"
   end
 
 end

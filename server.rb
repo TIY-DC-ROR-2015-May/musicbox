@@ -116,7 +116,9 @@ class MusicBoxApp < Sinatra::Base
 
   post "/invite_user" do
     if current_user.admin?
-      User.create! name: params[:name]
+      u = User.create! name: params[:name]
+    else
+      body "Insufficient privileges."
     end
   end
 
