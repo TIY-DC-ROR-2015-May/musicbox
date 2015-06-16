@@ -39,6 +39,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   get "/" do
+    @songs = Song.all
     erb :home
   end
 

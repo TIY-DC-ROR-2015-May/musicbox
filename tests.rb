@@ -83,4 +83,26 @@ class ServerTest < Minitest::Test
     assert_includes last_response.body, "You have exceeded your weekly vote limit!"
   end
 
+  def test_user_signed_in
+    james = User.create! name: "James", password: "hunter2"
+    sign_in james
+    song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
+    response = get "/"
+    assert_includes response.body, "vote"
+    assert_equal last_response.status, 200 
+    assert_includes response.body, "suggest"
+    assert_includes response.body, "artist: ODESZA, title: All We Need"
+  end
+
+  def test_user_not_signed_in
+    james = User.create! name: "James", password: "hunter2"
+
+    song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
+    response = get "/"
+    refute_includes response.body, "vote"
+    refute_includes response.body, "suggest"
+    assert_includes response.body, song.artist
+    assert_includes response.body, song.title
+
+  end
 end
