@@ -3,7 +3,7 @@ require 'tilt/erubis' # Fixes a warning
 require 'pry'
 require './db/setup'
 require './lib/all'
-require '.spotify_api.rb'
+require './spotify_api'
 
 class MusicBoxApp < Sinatra::Base
   enable :logging
@@ -59,11 +59,15 @@ class MusicBoxApp < Sinatra::Base
     # enter Artist, Title, Album=nil
     # submit and save to Songs table
     # require_current_user
+    spot = SpotifyAPI.new
+    spot_track = spot.get_track params[:artist], params[:title]
+    uri = spot_track[1]
     if current_user.num_of_songs_suggested_this_week <= 4 
       song = Song.where(
         artist:       params[:artist],
         title:        params[:title],
-        suggester_id: current_user.id
+        suggester_id: current_user.id,
+        uri:          uri
       ).first_or_create!
     else
       set_message "You have submitted too many songs this week. Try again later."
@@ -71,9 +75,10 @@ class MusicBoxApp < Sinatra::Base
     redirect to("/")
   end
 
-  post "/get_song"
-
-  end
+  # post "/get_song"
+  #   spot = SpotifyAPI.new
+  #   spot.get_track params[:artist], params[:title]
+  # end
 
   delete "/sign_out" do
     if current_user

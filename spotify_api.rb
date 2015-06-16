@@ -39,3 +39,7 @@ class SpotifyAPI
     track_list.first
   end
 end
+
+# require 'pry'
+# spot = SpotifyAPI.new
+# binding.pry
