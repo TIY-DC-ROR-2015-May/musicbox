@@ -3,6 +3,7 @@ require 'tilt/erubis' # Fixes a warning
 require 'pry'
 require './db/setup'
 require './lib/all'
+require '.spotify_api.rb'
 
 class MusicBoxApp < Sinatra::Base
   enable :logging
@@ -68,6 +69,10 @@ class MusicBoxApp < Sinatra::Base
       set_message "You have submitted too many songs this week. Try again later."
     end
     redirect to("/")
+  end
+
+  post "/get_song"
+
   end
 
   delete "/sign_out" do

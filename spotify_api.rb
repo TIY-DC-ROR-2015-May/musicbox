@@ -32,17 +32,10 @@ class SpotifyAPI
     SpotifyAPI.get("/users/#{user}/repos", query: { page: page, per_page: 50 })
   end
 
-  def get_track #artist, title
-    a = "Muse"
-    t = "uprising"
-    SpotifyAPI.get("/v1/search", query: { q: "artist:#{a} + track:#{t}", type: "track"}) 
+  def get_track artist, track
+    s = SpotifyAPI.get("/v1/search", query: { q: "artist:#{artist} + track:#{track}", type: "track"}) 
     # query: { q: "uprising", type: "track"}
-    # s["tracks"]["items"].map { |track| track.values_at("name", "uri") }
+    track_list = s["tracks"]["items"].map { |track| track.values_at("name", "uri") }
+    track_list.first
   end
 end
-
-require "pry"
-spot = SpotifyAPI.new
-s = spot.get_track
-track_list = s["tracks"]["items"].map { |track| track.values_at("name", "uri") }
-binding.pry
