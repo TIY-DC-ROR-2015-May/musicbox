@@ -78,6 +78,22 @@ class MusicBoxApp < Sinatra::Base
       body "You have exceeded your weekly vote limit!"
     end
   end
+
+  get "/change_password" do
+    @password = current_user.password
+    @username = current_user.name
+    erb :change_password
+  end
+
+  post "/update_password" do
+    current_user.update(password: params["new_password"])
+    redirect to("/change_password")
+  end
+
+  post "/update_username" do
+    current_user.update(name: params["new_username"])
+    redirect to("/change_password")
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__

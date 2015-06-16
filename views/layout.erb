@@ -8,11 +8,11 @@
     <h1>MusicBox</h1>
 
     <% if current_user %>
-      <p>Log Out, <%= current_user.name %></p>
-      
+      <p>Welcome <%= current_user.name %></p>
       <form method="POST" action="/sign_out">
         <button>Log Out</button>
       </form>
+      <a href="/change_password">Change Credentials</a>
     <% else %>
       <p>You are now logged out, <a href="/sign_in">sign in</a></p>
     <% end %>
