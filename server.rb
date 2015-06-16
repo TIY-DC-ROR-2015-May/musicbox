@@ -29,6 +29,14 @@ class MusicBoxApp < Sinatra::Base
     session.delete(:flash_message)
   end
 
+  def admin_set_message message
+    session[:flash_message] = message
+  end
+
+  def admin_get_message
+    session.delete(:flash_message)
+  end
+
   get "/sign_in" do
     erb :sign_in
   end
@@ -112,10 +120,11 @@ class MusicBoxApp < Sinatra::Base
     if current_user.admin?
       deleted_user = User.find_by_name(params[:name])
       deleted_user.destroy
-      "#{deleted_user.name} has been deleted."
+      admin_set_message "#{deleted_user.name} has been deleted."
     else
       body "Insufficient privileges."
     end
+    redirect to("/admin_dashboard")
   end
 
   post "/invite_user" do
@@ -123,14 +132,23 @@ class MusicBoxApp < Sinatra::Base
       new_user = User.create! name: params[:name], password: params[:password]
       new_user
         if new_user
-          set_message "User account has been created. The temporary password is #{params[:password]}."
+          admin_set_message "User account has been created. The temporary password is #{params[:password]}."
         else
-          set_message "A user with this name already exists."
+          admin_set_message "A user with this name already exists."
         end
     else
       body "Insufficient privileges."
     end
+    redirect to("/admin_dashboard")
   end
+
+  post "/assign_admin" do
+    soon_to_be_admin = User.find_by_name(params[:name])
+    soon_to_be_admin.update(admin: true)
+    admin_set_message "#{soon_to_be_admin.name} now has admin privileges."
+    redirect to("/admin_dashboard")
+  end
+
 
 end
 
