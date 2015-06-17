@@ -131,7 +131,7 @@ class MusicBoxApp < Sinatra::Base
 
   get "/about_song/:id" do
     require_user
-    passed_song = Song.find(params[:id])
+    @song = Song.find(params[:id])
     erb :song
   end
 
