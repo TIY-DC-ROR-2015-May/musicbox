@@ -12,6 +12,10 @@ class MusicBoxApp < Sinatra::Base
 
   set :session_secret, File.read("./session_secret.txt")
 
+  after do
+    ActiveRecord::Base.connection.close
+  end
+
   def current_user
     if session[:logged_in_user_id]
       User.find session[:logged_in_user_id]
@@ -36,11 +40,11 @@ class MusicBoxApp < Sinatra::Base
   end
 
   def admin_set_message message
-    session[:admin_flash_message] = message
+    set_message message
   end
 
   def admin_get_message
-    session.delete(:admin_flash_message)
+    get_message
   end
 
   get "/sign_in" do
