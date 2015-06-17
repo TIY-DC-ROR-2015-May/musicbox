@@ -7,7 +7,7 @@
       <th>Artist</th>
       <th>Title</th>
       <th>Suggested By</th>
-      <th><a href="/about_song">More Details</a></th>
+      <th>Total Votes</th>
     </tr>
   </thead>
   <tbody>
@@ -16,7 +16,8 @@
         <td><%= song.artist %></td>
         <td><%= song.title %></td>
         <td><%= song.suggester.name %></td>
-        <td><a href="/about_song">More Details</a></td>
+        <td><%= song.total_votes %></td>
+        <td><a href="/about_song/<%= song.id %>">More Details</a></td>
       </tr>
     <% end %>
   </tbody>
