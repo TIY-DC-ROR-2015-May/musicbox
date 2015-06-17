@@ -1,14 +1,14 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  has_many :votes
+  has_many :votes, foreign_key: "voter_id"
 
   # These would be ambiguous
   # has_many :songs
   # has_many :songs, through: :votes
   # FIXME
   has_many :suggested_songs, class_name: "Song", foreign_key: "suggester_id"
-  has_many :voted_songs, through: :votes
+  has_many :voted_songs, through: :votes, source: :song
 
   validates_presence_of :name, :password
   validates_uniqueness_of :name

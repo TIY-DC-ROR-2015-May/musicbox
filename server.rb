@@ -149,6 +149,9 @@ class MusicBoxApp < Sinatra::Base
   	require_user
     @password = current_user.password
     @username = current_user.name
+    @votes_left = current_user.votes_left
+    @admin = current_user.admin
+    @user_votes = current_user.votes
     erb :change_password
   end
 
