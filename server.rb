@@ -11,7 +11,7 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  set :session_secret, File.read("./session_secret.txt")
+  # set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]
@@ -27,6 +27,14 @@ class MusicBoxApp < Sinatra::Base
 
   def get_message
     session.delete(:flash_message)
+  end
+
+  def admin_set_message message
+    session[:admin_flash_message] = message
+  end
+
+  def admin_get_message
+    session.delete(:admin_flash_message)
   end
 
   get "/sign_in" do
@@ -102,6 +110,52 @@ class MusicBoxApp < Sinatra::Base
   post "/update_username" do
     current_user.update(name: params["new_username"])
     redirect to("/change_password")
+  end
+
+  get "/admin_dashboard" do
+    erb :admin_dashboard
+  end
+
+  patch "/delete_user" do
+    if current_user.admin?
+      deleted_user = User.find_by_name(params[:name])
+      deleted_user.destroy
+      admin_set_message "#{deleted_user.name} has been deleted."
+    else
+      body "Insufficient privileges."
+    end
+    redirect to("/admin_dashboard")
+  end
+
+  post "/invite_user" do
+    if current_user.admin?
+      new_user = User.create name: params[:name], password: params[:password]
+        if new_user.persisted?
+          admin_set_message "User account has been created. The temporary password is #{params[:password]}."
+        else
+          admin_set_message "A user with this name already exists."
+        end
+    end
+    redirect to("/admin_dashboard")
+  end
+
+  patch "/assign_admin" do
+    if current_user.admin?
+      new_admin = User.find_by_name(params[:name])
+      if new_admin
+        new_admin.update(admin: true)
+        admin_set_message "#{new_admin.name} now has admin privileges."
+      end
+    end
+    redirect to("/admin_dashboard")
+  end
+
+  patch "/revoke_admin" do
+    if current_user.admin?
+      revoked_admin = User.find_by_name(params[:name])
+      revoked_admin.update(admin: false)
+    end
+    redirect to("/admin_dashboard")
   end
 end
 

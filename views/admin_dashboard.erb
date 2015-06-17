@@ -1,0 +1,30 @@
+<h2>Admin privileges</h2>
+
+<% if a_msg = admin_get_message %>
+  <p><%= a_msg %></p>
+<% end %>
+
+<h3>Invite users</h3>
+<form method="POST" action="/invite_user">
+  Username
+  <input type="text" name="name">
+  Password
+  <input type="password" name="password">
+  <button>Create user account</button>
+</form>
+
+<h3>Remove users</h3>
+<form method="POST" action="/delete_user">
+  <input type="hidden" name="_method" value="PATCH">
+  Username
+  <input type="text" name="name">
+  <button>Delete</button>
+</form>
+
+<h3>Assign admin to other users</h3>
+<form method="POST" action="/assign_admin">
+  <input type="hidden" name="_method" value="PATCH">
+  Username
+  <input type="text" name="name">
+  <button>Make admin</button>
+</form>
