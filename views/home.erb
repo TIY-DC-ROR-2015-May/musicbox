@@ -21,10 +21,24 @@
   <% @songs.each do |song| %>
     <li>
       <% if current_user %>
-        <button>vote</button>
+        <form method="POST" action="/vote">
+           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
+           <input type= "hidden" name= "value" value= "1">  
+          <button>upvote</button>
+        </form>
+        <form method="POST" action="/vote">
+           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
+           <input type= "hidden" name= "value" value= "-1">  
+        <button>downvote</button>
+        </form>
       <% end %>
-      <% if @songs %>
-        artist: <%= song.artist %>, title: <%= song.title %>, preview: <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
+      <%# Comment 1 - This is an n+
+      1 query FIXME %>
+      <!-- Comment 2 -->
+      votes: <%= song.total_votes %>,
+      artist: <%= song.artist %>, title: <%= song.title %>
+      <% if song.uri %>
+        <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
       <% end %>
     </li>
   <% end %>
