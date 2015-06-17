@@ -2,27 +2,37 @@
 <html>
   <head>
     <title>MusicBox</title>
+    <link href="/index.css" rel="stylesheet">
   </head>
 
   <body>
-    <h1>MusicBox</h1>
+    <div class="header">
+      <h1>MusicBox</h1>
 
-    <% if msg = get_message %>
-      <p><%= msg %></p>
-    <% end %>
+      <div class="user-info">
+        <% if current_user %>
+          <a href="/change_password"><%= current_user.name %></a>
+          <form method="POST" action="/sign_out">
+            <input type="hidden" name="_method" value="DELETE">
+            <button>Log Out</button>
+          </form>
 
-    <% if current_user %>
-      <p>Welcome <%= current_user.name %></p>
-      <form method="POST" action="/sign_out">
-        <input type="hidden" name="_method" value="DELETE">
-        <button>Log Out</button>
-      </form>
-      <a href="/change_password">Change Credentials</a>
-    <% else %>
-      <p>You are logged out, <a href="/sign_in">sign in</a></p>
-    <% end %>
+          <% if current_user.admin? %>
+            <a href="/admin_dashboard">Admin Dashboard</a>
+          <% end %>
 
+        <% else %>
+          <p>You are logged out, <a href="/sign_in">sign in</a></p>
+        <% end %>
+      </div>
+    </div>
 
-    <%= yield %>
+    <div class="container">
+      <% if msg = get_message %>
+        <div class="alert-message"><%= msg %></div>
+      <% end %>
+
+      <%= yield %>
+    </div>
   </body>
 </html>

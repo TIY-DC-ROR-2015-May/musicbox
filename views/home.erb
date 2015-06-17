@@ -1,45 +1,38 @@
-<h2>Welcome to the home page</h2>
-<% if current_user.admin? %>
-  <a href="/admin_dashboard">Admin Dashboard</a>
-<% end %>
-
-
 <% if current_user %>
-  <h3>Suggest a song</h3>
-  <form method="POST" action="/suggest_song">
-    Song title
-    <input type="text" name="title">
-    Artist name
-    <input type="text" name="artist">
-    <button>Submit</button>
-  </form>
+  <div class="suggest">
+    <h3>Suggest a song</h3>
+    <form method="POST" action="/suggest_song">
+      <input type="text" name="title" placeholder="Title">
+      <input type="text" name="artist" placeholder="Artist">
+      <button>Submit</button>
+    </form>
+  </div>
 <% end %>
 
 
 <h3>Songs</h3>
-<ul>
-  <% @songs.each do |song| %>
-    <li>
+<% @songs.each do |song| %>
+  <div class="song">
+    <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true" class="spotify-embed"></iframe>
+
+    <div class="vote-buttons">
       <% if current_user %>
         <form method="POST" action="/vote">
-           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
-           <input type= "hidden" name= "value" value= "1">  
-          <button>upvote</button>
+           <input type= "hidden" name= "song_title" value="<%=song.title%>">
+           <input type= "hidden" name= "value" value= "1">
+          <button class="upvote">👍</button>
         </form>
+      <% end %>
+
+      <%= song.total_votes %>
+
+      <% if current_user %>
         <form method="POST" action="/vote">
-           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
-           <input type= "hidden" name= "value" value= "-1">  
-        <button>downvote</button>
+           <input type= "hidden" name= "song_title" value="<%=song.title%>">
+           <input type= "hidden" name= "value" value= "-1">
+           <button class="downvote">👎</button>
         </form>
       <% end %>
-      <%# Comment 1 - This is an n+
-      1 query FIXME %>
-      <!-- Comment 2 -->
-      votes: <%= song.total_votes %>,
-      artist: <%= song.artist %>, title: <%= song.title %>
-      <% if song.uri %>
-        <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+    </div>
+  </div>
+<% end %>
