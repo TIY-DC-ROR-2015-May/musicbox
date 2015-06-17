@@ -66,6 +66,7 @@ class ServerTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal 5, test_song.total_votes
     assert_equal 5, Vote.count
+    assert_equal 5, User.find_by_name(katie.name).votes_left
 
     3.times do
       post "/vote", song_title: test_song.title, value: -1
@@ -74,6 +75,7 @@ class ServerTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal 2, test_song.total_votes
     assert_equal 8, Vote.count
+    assert_equal 2, User.find_by_name(katie.name).votes_left
   end
 
   def test_users_have_limited_number_of_votes
@@ -104,7 +106,6 @@ class ServerTest < Minitest::Test
 
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
-    # binding.pry
     # refute_includes response.body, "vote"
     # refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
