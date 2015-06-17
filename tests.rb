@@ -63,15 +63,19 @@ class ServerTest < Minitest::Test
       post "/vote", song_title: test_song.title, value: 1
     end
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 5, test_song.total_votes
+    assert_equal 5, Vote.count
+    assert_equal 5, User.find_by_name(katie.name).votes_left
 
     3.times do
       post "/vote", song_title: test_song.title, value: -1
     end
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 2, test_song.total_votes
+    assert_equal 8, Vote.count
+    assert_equal 2, User.find_by_name(katie.name).votes_left
   end
 
   def test_users_have_limited_number_of_votes
@@ -82,9 +86,8 @@ class ServerTest < Minitest::Test
 
     post "/vote", song_title: test_song.title, value: 1
 
-    assert_equal 400, last_response.status
-    assert_includes last_response.body, "You have exceeded your weekly vote limit!"
-
+    assert_equal 302, last_response.status
+    assert_equal 0, Vote.count
   end
 
   def test_user_signed_in
@@ -103,7 +106,6 @@ class ServerTest < Minitest::Test
 
     song = james.suggested_songs.create! artist: "ODESZA", title: "All We Need"
     response = get "/"
-    # binding.pry
     # refute_includes response.body, "vote"
     # refute_includes response.body, "suggest"
     assert_includes response.body, song.artist
@@ -193,8 +195,6 @@ class ServerTest < Minitest::Test
     assert_equal 302, last_response.status
     assert_equal false, User.find_by_name(james.name).admin?
   end
-
-  ##########
 
   def test_winning_votes_playlist
     james = User.create! name: "James", password: "hunter2", votes_left: 10

@@ -12,6 +12,10 @@ class MusicBoxApp < Sinatra::Base
 
   set :session_secret, File.read("./session_secret.txt")
 
+  after do
+    ActiveRecord::Base.connection.close
+  end
+
   def current_user
     if session[:logged_in_user_id]
       User.find session[:logged_in_user_id]
@@ -36,11 +40,11 @@ class MusicBoxApp < Sinatra::Base
   end
 
   def admin_set_message message
-    session[:admin_flash_message] = message
+    set_message message
   end
 
   def admin_get_message
-    session.delete(:admin_flash_message)
+    get_message
   end
 
   get "/sign_in" do
@@ -110,11 +114,12 @@ class MusicBoxApp < Sinatra::Base
     if current_user.votes_left > 0
       song = Song.find_by_title(params[:song_title])
       # current_user.votes.create! song_id: song_id, value: params[:value]
-
       Vote.create! voter_id: current_user.id, song_id: song.id, value: params[:value]
+      vl = current_user.votes_left
+      current_user.update(votes_left: vl -= 1)
     else
+      set_message "You are out of votes!"
       status 400
-      body "You have exceeded your weekly vote limit!"
     end
     redirect to ("/")
   end
@@ -162,8 +167,6 @@ class MusicBoxApp < Sinatra::Base
       deleted_user = User.find_by_name(params[:name])
       deleted_user.destroy
       admin_set_message "#{deleted_user.name} has been deleted."
-    else
-      body "Insufficient privileges."
     end
     redirect to("/admin_dashboard")
   end
