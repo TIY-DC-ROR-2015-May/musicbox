@@ -120,6 +120,11 @@ class ServerTest < Minitest::Test
     song4 = Song.create! suggester_id: james.id, artist: "GHI", title: "789"
     song5 = Song.create! suggester_id: james.id, artist: "JKL", title: "101112"
 
+    # 5.times do
+    #   song1.votes.create! value: 1
+    #   song2.votes.create! value: -1
+    # end
+
     sign_in james, "hunter2"
     post "/vote", song_title: song1.title, value: 1
     post "/vote", song_title: song2.title, value: -1
