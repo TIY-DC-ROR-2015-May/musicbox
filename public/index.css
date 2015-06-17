@@ -11,20 +11,27 @@ a:hover {
 
 body {
   font-family: Helvetica, sans-serif;
-  background-color: #3c3c3c;
+  background-repeat: no-repeat;
   color: #dedede;
+  background-size: 1440px 900px;
+  background-color: rgb(105, 104, 108);
+
+  background-image:url("http://www.themilkmen.co/wp-content/uploads/2013/12/drake-crop.jpg");
 }
 
 .container {
   width: 800px;
   height: 100vh;
   margin: 0 auto;
+  padding:20px;
 }
 
 .header {
   position: relative;
   height: 100px;
   font-family: monospace;
+  background-color: rgba(00, 00, 00, .5);
+
 }
 
 .alert-message {
@@ -37,7 +44,6 @@ body {
 h1 {
   font-size: 80px;
   text-align: center;
-  text-shadow: -3px 3px pink;
 }
 
 .user-info {
@@ -54,6 +60,9 @@ button {
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
+  background-color: rgb(58, 63, 71);
+  color:white;
+  border:none;
 }
 
 input {
@@ -73,4 +82,18 @@ input {
 
 .suggest {
   margin-bottom: 25px;
+}
+
+button.upvote{
+  font-size:20px;
+  padding:0;
+}
+
+button.downvote{
+  font-size:20px;
+  padding:0;
+}
+
+.voter{
+  background-color: rgb(58, 63, 71);
 }
