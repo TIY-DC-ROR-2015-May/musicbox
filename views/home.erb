@@ -16,16 +16,20 @@
     <li>
       <% if current_user %>
         <form method="POST" action="/vote">
-           <input type= "hidden" name= "song_title" value= <%=song.title%>> 
+           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
            <input type= "hidden" name= "value" value= "1">  
           <button>upvote</button>
         </form>
         <form method="POST" action="/vote">
-           <input type= "hidden" name= "song_title" value= <%=song.title%>> 
+           <input type= "hidden" name= "song_title" value="<%=song.title%>"> 
            <input type= "hidden" name= "value" value= "-1">  
         <button>downvote</button>
         </form>
       <% end %>
+      <%# Comment 1 - This is an n+
+      1 query FIXME %>
+      <!-- Comment 2 -->
+      votes: <%= song.total_votes %>,
       artist: <%= song.artist %>, title: <%= song.title %>
     </li>
   <% end %>
