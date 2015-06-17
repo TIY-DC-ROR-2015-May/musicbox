@@ -134,6 +134,11 @@ class MusicBoxApp < Sinatra::Base
     erb :show_playlist
   end
 
+  get "/playlist" do
+    @playlist = Playlist.order(created_at: :asc).last
+    erb :show_playlist
+  end
+
   get "/change_password" do
   	require_user
     @password = current_user.password
