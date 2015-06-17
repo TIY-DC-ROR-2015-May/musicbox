@@ -30,11 +30,11 @@ class MusicBoxApp < Sinatra::Base
   end
 
   def admin_set_message message
-    session[:flash_message] = message
+    session[:admin_flash_message] = message
   end
 
   def admin_get_message
-    session.delete(:flash_message)
+    session.delete(:admin_flash_message)
   end
 
   get "/sign_in" do
@@ -129,9 +129,8 @@ class MusicBoxApp < Sinatra::Base
 
   post "/invite_user" do
     if current_user.admin?
-      new_user = User.create! name: params[:name], password: params[:password]
-      new_user
-        if new_user
+      new_user = User.create name: params[:name], password: params[:password]
+        if new_user.persisted?
           admin_set_message "User account has been created. The temporary password is #{params[:password]}."
         else
           admin_set_message "A user with this name already exists."
@@ -143,8 +142,10 @@ class MusicBoxApp < Sinatra::Base
   patch "/assign_admin" do
     if current_user.admin?
       new_admin = User.find_by_name(params[:name])
-      new_admin.update(admin: true)
-      admin_set_message "#{new_admin.name} now has admin privileges."
+      if new_admin
+        new_admin.update(admin: true)
+        admin_set_message "#{new_admin.name} now has admin privileges."
+      end
     end
     redirect to("/admin_dashboard")
   end
