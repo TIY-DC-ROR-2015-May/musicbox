@@ -36,8 +36,7 @@
       1 query FIXME %>
       <!-- Comment 2 -->
       votes: <%= song.total_votes %>,
-      artist: <%= song.artist %>, title: <%= song.title %>
-      <a href="/about_song">More Details</a>
+      artist: <%= song.artist %>, title: <%= song.title %>, <a href="/about_song/<%= song.id %>">More Details</a>
       <% if song.uri %>
         <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
       <% end %>

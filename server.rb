@@ -129,6 +129,12 @@ class MusicBoxApp < Sinatra::Base
     erb :show_playlist
   end
 
+  get "/about_song/:id" do
+    require_user
+    passed_song = Song.find(params[:id])
+    erb :song
+  end
+
   get "/change_password" do
   	require_user
     @password = current_user.password
@@ -197,12 +203,6 @@ class MusicBoxApp < Sinatra::Base
       revoked_admin.update(admin: false)
     end
     redirect to("/admin_dashboard")
-  end
-
-  get "/about_song" do
-    require_user
-    @song = 
-    erb :song
   end
 end
 
