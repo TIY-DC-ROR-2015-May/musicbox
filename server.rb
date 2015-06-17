@@ -199,9 +199,10 @@ class MusicBoxApp < Sinatra::Base
     redirect to("/admin_dashboard")
   end
 
-  post "/about_song" do
+  get "/about_song" do
     require_user
-    
+    @song = 
+    erb :song
   end
 end
 

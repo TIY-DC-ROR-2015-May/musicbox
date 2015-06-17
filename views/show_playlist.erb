@@ -7,6 +7,7 @@
       <th>Artist</th>
       <th>Title</th>
       <th>Suggested By</th>
+      <th><a href="/about_song">More Details</a></th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +16,7 @@
         <td><%= song.artist %></td>
         <td><%= song.title %></td>
         <td><%= song.suggester.name %></td>
+        <td></td>
       </tr>
     <% end %>
   </tbody>

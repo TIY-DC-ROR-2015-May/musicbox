@@ -1,5 +1,5 @@
 <h2>Welcome to the home page</h2>
-<% if current_user.admin? %>
+<% if current_user && current_user.admin? %>
   <a href="/admin_dashboard">Admin Dashboard</a>
 <% end %>
 
@@ -37,6 +37,7 @@
       <!-- Comment 2 -->
       votes: <%= song.total_votes %>,
       artist: <%= song.artist %>, title: <%= song.title %>
+      <a href="/about_song">More Details</a>
       <% if song.uri %>
         <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true"></iframe>
       <% end %>
