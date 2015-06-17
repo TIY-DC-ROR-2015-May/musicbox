@@ -12,7 +12,7 @@
     <% end %>
 
     <% if current_user %>
-      <p>Welcome <%= current_user.name %></p>
+      <p>Welcome <%= current_user.name %>!  You have <%= current_user.votes_left %> votes left!</p>
       <form method="POST" action="/sign_out">
         <input type="hidden" name="_method" value="DELETE">
         <button>Log Out</button>
