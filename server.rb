@@ -139,6 +139,12 @@ class MusicBoxApp < Sinatra::Base
     erb :show_playlist
   end
 
+  get "/about_song/:id" do
+    require_user
+    @song = Song.find(params[:id])
+    erb :song
+  end
+
   get "/change_password" do
   	require_user
     @password = current_user.password

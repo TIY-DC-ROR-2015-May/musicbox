@@ -2,12 +2,26 @@
 <p>Created at <%= @playlist.created_at %>
 
 <table class="table table-condensed table-striped">
-
+  <thead>
+    <tr>
+      <th>Artist</th>
+      <th>Title</th>
+      <th>Suggested By</th>
+      <th>Total Votes</th>
+    </tr>
+  </thead>
   <tbody>
-  <h3>Songs</h3>
-    <% @playlist.each do |song| %>
-    <div class="song">
-      <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true" class="spotify-embed"></iframe>
+    <% @playlist.songs.each do |song| %>
+      <tr>
+        <td><%= song.artist %></td>
+        <td><%= song.title %></td>
+        <td><%= song.suggester.name %></td>
+        <td><%= song.total_votes %></td>
+        <td>
+          <a href="/about_song/<%= song.id %>">More Details</a>
+          <iframe src="https://embed.spotify.com/?uri=<%= song.uri %>" width="450" height="80" frameborder="0" allowtransparency="true" class="spotify-embed"></iframe>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
