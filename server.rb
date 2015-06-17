@@ -125,10 +125,12 @@ class MusicBoxApp < Sinatra::Base
   end
 
   get "/admin_dashboard" do
+  	require_user
     erb :admin_dashboard
   end
 
   patch "/delete_user" do
+  	require_user
     if current_user.admin?
       deleted_user = User.find_by_name(params[:name])
       deleted_user.destroy
@@ -140,6 +142,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   post "/invite_user" do
+  	require_user
     if current_user.admin?
       new_user = User.create name: params[:name], password: params[:password]
         if new_user.persisted?
@@ -152,6 +155,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   patch "/assign_admin" do
+  	require_user
     if current_user.admin?
       new_admin = User.find_by_name(params[:name])
       if new_admin
@@ -163,6 +167,7 @@ class MusicBoxApp < Sinatra::Base
   end
 
   patch "/revoke_admin" do
+  	require_user
     if current_user.admin?
       revoked_admin = User.find_by_name(params[:name])
       revoked_admin.update(admin: false)
