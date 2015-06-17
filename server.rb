@@ -160,8 +160,6 @@ class MusicBoxApp < Sinatra::Base
       deleted_user = User.find_by_name(params[:name])
       deleted_user.destroy
       admin_set_message "#{deleted_user.name} has been deleted."
-    else
-      body "Insufficient privileges."
     end
     redirect to("/admin_dashboard")
   end
