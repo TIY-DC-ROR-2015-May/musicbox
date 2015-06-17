@@ -1,5 +1,5 @@
 <h2>Welcome to the home page</h2>
-<% if current_user.admin? %>
+<% if current_user && current_user.admin? %>
   <a href="/admin_dashboard">Admin Dashboard</a>
 <% end %>
 
