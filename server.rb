@@ -110,7 +110,6 @@ class MusicBoxApp < Sinatra::Base
     if current_user.votes_left > 0
       song = Song.find_by_title(params[:song_title])
       # current_user.votes.create! song_id: song_id, value: params[:value]
-
       Vote.create! voter_id: current_user.id, song_id: song.id, value: params[:value]
     else
       status 400
