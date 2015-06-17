@@ -198,6 +198,11 @@ class MusicBoxApp < Sinatra::Base
     end
     redirect to("/admin_dashboard")
   end
+
+  post "/about_song" do
+    require_user
+    
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
