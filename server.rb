@@ -59,16 +59,20 @@ class MusicBoxApp < Sinatra::Base
     # require_current_user
     spot = SpotifyAPI.new
     spot_track = spot.get_track params[:artist], params[:title]
-    uri = spot_track[1]
-    if current_user.num_of_songs_suggested_this_week <= 4 
-      song = Song.where(
-        artist:       params[:artist],
-        title:        params[:title],
-        suggester_id: current_user.id,
-        uri:          uri
-      ).first_or_create!
+    if spot_track
+      uri = spot_track[1]
+      if current_user.num_of_songs_suggested_this_week <= 4 
+        song = Song.where(
+          artist:       params[:artist],
+          title:        params[:title],
+          suggester_id: current_user.id,
+          uri:          uri
+        ).first_or_create!
+      else
+        set_message "You have submitted too many songs this week. Try again later."
+      end
     else
-      set_message "You have submitted too many songs this week. Try again later."
+      set_message "No song found, please try again."
     end
     redirect to("/")
   end

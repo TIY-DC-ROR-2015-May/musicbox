@@ -19,8 +19,10 @@ class SpotifyAPI
   def get_track artist, track
     s = SpotifyAPI.get("/v1/search", query: { q: "artist:#{artist} + track:#{track}", type: "track"}) 
     # query: { q: "uprising", type: "track"}
-    track_list = s["tracks"]["items"].map { |track| track.values_at("name", "uri") }
-    track_list.first
+    if s
+      track_list = s["tracks"]["items"].map { |track| track.values_at("name", "uri") }
+      track_list.first
+    end
   end
 end
 
