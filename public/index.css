@@ -15,6 +15,18 @@ body {
   color: #dedede;
 }
 
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin: 10px 0;
+}
+
+h2 {
+  text-align: center;
+}
+
 .container {
   width: 800px;
   height: 100vh;
@@ -74,3 +86,34 @@ input {
 .suggest {
   margin-bottom: 25px;
 }
+
+.left-column, .right-column {
+  display: inline-block;
+  margin: 20px 20px;
+  vertical-align: top;
+}
+.password-change {
+  margin: 15px 0 20px 0;
+}
+
+#vote-list, #suggestion-list {
+  text-align: center;
+}
+
+.song-info {
+  display:inline-block;
+  vertical-align: top;
+  margin-top: 5px;
+  text-align: right;
+}
+
+.timestamp {
+  color: RGB(191,186,187);
+  font-size: 13px;
+}
+
+.vote {
+  margin-top: 5px;
+  color: rgb(17, 188, 28);
+}
+
