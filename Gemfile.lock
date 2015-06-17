@@ -47,3 +47,6 @@ DEPENDENCIES
   rack-test
   sqlite3
   tilt
+
+BUNDLED WITH
+   1.10.3

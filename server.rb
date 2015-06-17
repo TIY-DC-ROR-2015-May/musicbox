@@ -1,17 +1,16 @@
 require 'sinatra/base'
 require 'tilt/erubis' # Fixes a warning
-
 require 'pry'
-
 require './db/setup'
 require './lib/all'
+require './spotify_api'
 
 class MusicBoxApp < Sinatra::Base
   enable :logging
   enable :method_override
   enable :sessions
 
-  # set :session_secret, File.read("./session_secret.txt")
+  set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]
@@ -72,17 +71,30 @@ class MusicBoxApp < Sinatra::Base
     # enter Artist, Title, Album=nil
     # submit and save to Songs table
     require_user
-    if current_user.num_of_songs_suggested_this_week <= 4 
-      song = Song.where(
-        artist:       params[:artist],
-        title:        params[:title],
-        suggester_id: current_user.id
-      ).first_or_create!
+    spot = SpotifyAPI.new
+    spot_track = spot.get_track params[:artist], params[:title]
+    if spot_track
+      uri = spot_track[1]
+      if current_user.num_of_songs_suggested_this_week <= 4 
+        song = Song.where(
+          artist:       params[:artist],
+          title:        params[:title],
+          suggester_id: current_user.id,
+          uri:          uri
+        ).first_or_create!
+      else
+        set_message "You have submitted too many songs this week. Try again later."
+      end
     else
-      set_message "You have submitted too many songs this week. Try again later."
+      set_message "No song found, please try again."
     end
     redirect to("/")
   end
+
+  # post "/get_song"
+  #   spot = SpotifyAPI.new
+  #   spot.get_track params[:artist], params[:title]
+  # end
 
   delete "/sign_out" do
   	require_user
