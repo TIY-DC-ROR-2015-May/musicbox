@@ -119,7 +119,7 @@ class MusicBoxApp < Sinatra::Base
     redirect to ("/")
   end
 
-  get "/playlist" do
+  post "/playlist" do
     @playlist = Playlist.create!
     Song.by_sort_letter.each do |letter, songs|
       next unless songs
