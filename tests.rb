@@ -63,15 +63,17 @@ class ServerTest < Minitest::Test
       post "/vote", song_title: test_song.title, value: 1
     end
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 5, test_song.total_votes
+    assert_equal 5, Vote.count
 
     3.times do
       post "/vote", song_title: test_song.title, value: -1
     end
 
-    assert_equal 200, last_response.status
+    assert_equal 302, last_response.status
     assert_equal 2, test_song.total_votes
+    assert_equal 8, Vote.count
   end
 
   def test_users_have_limited_number_of_votes
@@ -82,8 +84,8 @@ class ServerTest < Minitest::Test
 
     post "/vote", song_title: test_song.title, value: 1
 
-    assert_equal 400, last_response.status
-    assert_includes last_response.body, "You have exceeded your weekly vote limit!"
+    assert_equal 302, last_response.status
+    assert_equal 0, Vote.count
   end
 
   def test_user_signed_in

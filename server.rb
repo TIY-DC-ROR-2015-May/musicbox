@@ -10,7 +10,7 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  set :session_secret, File.read("./session_secret.txt")
+  # set :session_secret, File.read("./session_secret.txt")
 
   def current_user
     if session[:logged_in_user_id]
@@ -113,7 +113,6 @@ class MusicBoxApp < Sinatra::Base
       Vote.create! voter_id: current_user.id, song_id: song.id, value: params[:value]
     else
       status 400
-      body "You have exceeded your weekly vote limit!"
     end
     redirect to ("/")
   end
