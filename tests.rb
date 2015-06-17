@@ -21,8 +21,7 @@ class ServerTest < Minitest::Test
   end
 
   def setup
-    User.delete_all
-    Song.delete_all
+    [User, Song, Vote].each { |klass| klass.delete_all }
   end
 
   def sign_in user, password
@@ -245,5 +244,5 @@ class ServerTest < Minitest::Test
     assert_includes response.body, "All We Need"
     refute_includes response.body, "Apples to Apples"
   end
-  
+
 end
