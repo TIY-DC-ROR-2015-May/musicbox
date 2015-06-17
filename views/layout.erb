@@ -1,28 +1,49 @@
 <!doctype html5>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
     <title>MusicBox</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cover.css">
   </head>
 
   <body>
-    <h1>MusicBox</h1>
 
-    <% if msg = get_message %>
-      <p><%= msg %></p>
-    <% end %>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              
+            
+          <div class="inner cover">
+            <h1 class="cover-heading">MusicBox</h1>
 
-    <% if current_user %>
-      <p>Welcome <%= current_user.name %></p>
-      <form method="POST" action="/sign_out">
-        <input type="hidden" name="_method" value="DELETE">
-        <button>Log Out</button>
-      </form>
-      <a href="/change_password">Change Credentials</a>
-    <% else %>
-      <p>You are logged out, <a href="/sign_in">sign in</a></p>
-    <% end %>
+            <% if msg = get_message %>
+              <p><%= msg %></p>
+            <% end %>
+
+            <% if current_user %>
+              <p class="lead">Welcome <%= current_user.name %></p>
+              <form method="POST" action="/sign_out">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-lg btn-default">Log Out</button>
+              </form>
+              <a href="/change_password">Change Credentials</a>
+            <% else %>
+              <p>You are now logged out, <a href="/sign_in">sign in</a></p>
+            <% end %>
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+            <script src="js/bootstrap.min.js"></script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <%= yield %>
+
   </body>
 </html>

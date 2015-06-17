@@ -153,6 +153,11 @@ class MusicBoxApp < Sinatra::Base
     erb :admin_dashboard
   end
 
+  get "/playlist" do
+    @playlist = Playlist.last
+    erb :show_playlist
+  end
+
   patch "/delete_user" do
   	require_user
     if current_user.admin?
