@@ -8,6 +8,7 @@ gem 'minitest'
 gem 'rack-test'
 gem 'tilt'
 gem 'erubis'
+gem 'sinatra'
 
 group :development do
   gem 'sqlite3'
