@@ -26,17 +26,17 @@
         <form method="POST" action="/vote">
            <input type= "hidden" name= "song_title" value="<%=song.title%>">
            <input type= "hidden" name= "value" value= "1">
-          <button class="upvote">👍</button>
+          <button class="upvote">△</button>
         </form>
       <% end %>
-
+      <div class = "voter">
       <%= song.total_votes %>
-
+    </div>
       <% if current_user %>
         <form method="POST" action="/vote">
            <input type= "hidden" name= "song_title" value="<%=song.title%>">
            <input type= "hidden" name= "value" value= "-1">
-           <button class="downvote">👎</button>
+           <button class="downvote">▽</button>
         </form>
         <a href="/about_song/<%= song.id %>">More Details</a>
       <% end %>
