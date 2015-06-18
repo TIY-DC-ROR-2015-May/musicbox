@@ -86,6 +86,7 @@ class MusicBoxApp < Sinatra::Base
           suggester_id: current_user.id,
           uri:          uri
         ).first_or_create!
+        current_user.votes.create! song: song, value: 1
       else
         set_message "You have submitted too many songs this week. Try again later."
       end
