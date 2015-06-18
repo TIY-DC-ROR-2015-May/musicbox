@@ -9,6 +9,7 @@ gem 'rack-test'
 gem 'tilt'
 gem 'erubis'
 gem 'sinatra'
+gem 'httparty'
 
 group :development do
   gem 'sqlite3'
