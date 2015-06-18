@@ -215,6 +215,35 @@ class MusicBoxApp < Sinatra::Base
     end
     redirect to("/admin_dashboard")
   end
+
+  get "/songs/:letter" do
+    results = []
+
+    Song.all.each do |song|
+      if song.title.downcase.start_with? params[:letter].downcase
+        song_as_hash = {
+          artist:       song.artist,
+          title:        song.title,
+          vote_count:   song.total_votes,
+          spotify_uri:  song.uri,
+          suggested_by: song.suggester.name
+        }
+
+        results.push song_as_hash
+      end
+    end
+
+    sorted_results = results.sort_by { |h| h[:vote_count] }
+    unless params[:sort].to_s.downcase == "asc"
+      sorted_results.reverse!
+    end
+
+    # results = [
+    #   { artist: "ASDf", title: "aksjdnfa", vote_count: 2 },
+    #   { artist: "nsk", title: "asjdnf", vote_count: 3 }
+    # ]
+    return sorted_results.to_json
+  end
 end
 
 MusicBoxApp.run! if $PROGRAM_NAME == __FILE__
