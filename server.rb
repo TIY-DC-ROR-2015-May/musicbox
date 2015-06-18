@@ -1,5 +1,6 @@
 require 'sinatra/base'
 require 'tilt/erubis' # Fixes a warning
+require 'rack/cors'
 require 'pry'
 require './db/setup'
 require './lib/all'
@@ -11,6 +12,13 @@ class MusicBoxApp < Sinatra::Base
   enable :sessions
 
   set :session_secret, (ENV["SESSION_SECRET"] || "development")
+
+  use Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', headers: :any, methods: :get
+    end
+  end
 
   after do
     ActiveRecord::Base.connection.close

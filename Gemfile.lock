@@ -32,6 +32,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.6.1)
+    rack-cors (0.4.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -57,6 +58,7 @@ DEPENDENCIES
   minitest
   pg
   pry
+  rack-cors
   rack-test
   sinatra
   sqlite3
