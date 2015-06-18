@@ -10,7 +10,7 @@ class MusicBoxApp < Sinatra::Base
   enable :method_override
   enable :sessions
 
-  set :session_secret, File.read("./session_secret.txt")
+  set :session_secret, (ENV["SESSION_SECRET"] || "development")
 
   after do
     ActiveRecord::Base.connection.close
