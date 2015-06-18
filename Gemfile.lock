@@ -22,6 +22,7 @@ GEM
     json (1.8.3)
     method_source (0.8.2)
     minitest (5.7.0)
+    pg (0.18.2)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -43,10 +44,8 @@ DEPENDENCIES
   activerecord
   erubis
   minitest
+  pg
   pry
   rack-test
   sqlite3
   tilt
-
-BUNDLED WITH
-   1.10.3
